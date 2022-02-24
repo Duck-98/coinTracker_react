@@ -11,7 +11,11 @@ interface CoinInterface {
     is_active: boolean,
     type: string,
 };
-
+const Img = styled.img`
+width : 30px;
+height : 30px;
+margin-right : 10px;
+`;
 
 const Title = styled.h1`
 color : ${props => props.theme.accentColor};
@@ -44,9 +48,10 @@ border-radius : 15px;
 padding : 20px;
 margin-bottom : 10px;
 a{  
+    align-items : center;
     padding: 20px;
     transition: color 0.2s ease-in;
-    display : block;
+    display : flex;
 }
 &:hover {
     a{
@@ -79,7 +84,7 @@ function Coins(){
                 <CoinList>
                 {coins.map( (coin) => (
                 <Coin key={coin.id}>
-                <Link to={`/${coin.id}`}>{coin.name} &rarr;</Link>   
+                <Link to={`/${coin.id}`}><Img src={`https://cryptoicon-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`} />{coin.name} &rarr;</Link>   
                 </Coin>
                 ))}
             </CoinList>
