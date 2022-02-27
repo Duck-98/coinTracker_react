@@ -64,6 +64,7 @@ a{
 function Coins(){
     const [coins, setCoins] = useState<CoinInterface[]>([]);
     const [loading, setLoading] = useState(true);
+    
     useEffect(()=>{
        
         (async()=>{

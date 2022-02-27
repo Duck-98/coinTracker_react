@@ -1,7 +1,7 @@
 import {BrowserRouter,Switch, Route } from 'react-router-dom';
 import Coins from './routes/Coins';
 import Coin from './routes/Coin';
- // Router path"/:{url변수값}"
+ // Router path="/:{url변수값}"
 function Router(){
 return (
 <BrowserRouter>

@@ -86,7 +86,12 @@ display : flex;
 justify-content: center;
 align-items : center;
 `
-
+const CoinWrapper = styled.div`
+display : flex;
+justify-content: center;
+align-items : center;
+`;
+const Coinrank = styled. 
 
 function Coin(){
     const [loading, setLoading] = useState(true);
@@ -101,9 +106,10 @@ function Coin(){
            const priceData = await jsonPrice.json();
            setInfo(infoData);
            setPrice(priceData);
+           setLoading(false);
         })()
     }
-    ,[]);
+    ,[coinId]);
     const location = useLocation(); 
 
     console.log(location)
@@ -113,6 +119,9 @@ function Coin(){
                 <Title>{coinId}</Title>
             </Header>
         {loading ? <Loader>Loading..</Loader> : price?.quotes.USD.price }
+        <CoinWrapper>
+            {Rank : info.}
+        </CoinWrapper>
         </Container>
     )
 }
