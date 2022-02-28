@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams,Route,Switch } from 'react-router-dom';
+
 import styled from 'styled-components'
 
+
+
 interface RouteParams {
-    coinId : string;
-}
-interface ILocation {
-    state:{
-    name:string;
-    };
-};
+    coinId: string;
+  }
+  interface RouteState {
+    name: string;
+  }
 interface InfoData {
     id: string;
     name: string;
@@ -86,16 +87,35 @@ display : flex;
 justify-content: center;
 align-items : center;
 `
-const CoinWrapper = styled.div`
-display : flex;
-justify-content: center;
-align-items : center;
+
+const Overview = styled.div`
+  display: flex;
+  justify-content: space-between;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: white;
 `;
-const Coinrank = styled. 
+const OverviewItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  span:first-child {
+    font-size: 10px;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+`;
+const Description = styled.p`
+  margin: 20px 0px;
+  color: white;
+`;
 
 function Coin(){
     const [loading, setLoading] = useState(true);
     const {coinId} = useParams<RouteParams>();
+    const {state} = useLocation<RouteState>();
     const [info, setInfo] = useState<InfoData>();
     const [price, setPrice] = useState<PriceData>();
     useEffect(()=>{
@@ -116,12 +136,52 @@ function Coin(){
     return (
         <Container>
             <Header>
-                <Title>{coinId}</Title>
-            </Header>
-        {loading ? <Loader>Loading..</Loader> : price?.quotes.USD.price }
-        <CoinWrapper>
-            {Rank : info.}
-        </CoinWrapper>
+            <Title>
+          {state?.name ? state.name : loading ? "Loading..." : info?.name}
+        </Title>
+      </Header>
+      {loading ? (
+        <Loader>Loading...</Loader>
+      ) : (
+        <>
+          <Overview>
+            <OverviewItem>
+              <span>Rank:</span>
+              <span>{info?.rank}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>Symbol:</span>
+              <span>${info?.symbol}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>Open Source:</span>
+              <span>{info?.open_source ? "Yes" : "No"}</span>
+            </OverviewItem>
+          </Overview>
+          <Description>{info?.description}</Description>
+          <Overview>
+            <OverviewItem>
+              <span>Total Suply:</span>
+              <span>{price?.total_supply}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>Max Supply:</span>
+              <span>{price?.max_supply}</span>
+              {/* price.~~로 하게 된다면 항상 요구하기 때문에 데이터가 없을 때 오류를 발생할 수 있음. */}
+            </OverviewItem>
+          </Overview>
+
+          <Switch>
+            <Route path={`/${coinId}/price`}>
+              <Price />
+            </Route>
+            <Route path={`/${coinId}/chart`}>
+              <Chart />
+            </Route>
+          </Switch>
+
+        </>
+      )}
         </Container>
     )
 }
