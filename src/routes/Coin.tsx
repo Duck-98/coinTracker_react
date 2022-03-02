@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useLocation, useParams,Route,Switch } from 'react-router-dom';
-
+import { useLocation, useParams,Route,Switch,useHistory,Link,useRouteMatch } from 'react-router-dom';
+import Chart from './Chart';
+import Price from './Price';
 import styled from 'styled-components'
 
 
@@ -87,7 +88,12 @@ display : flex;
 justify-content: center;
 align-items : center;
 `
-
+const Back = styled.button`
+height : 20px;
+align-items : left;
+display: flex;
+color : ${props => props.theme.accentColor};
+`;
 const Overview = styled.div`
   display: flex;
   justify-content: space-between;
@@ -111,6 +117,27 @@ const Description = styled.p`
   margin: 20px 0px;
   color: white;
 `;
+const Tabs = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 25px 0px;
+  gap: 10px;
+`;
+
+const Tab = styled.span<{ isActive: boolean }>`
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 400;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 7px 0px;
+  border-radius: 10px;
+  color: ${(props) =>
+    props.isActive ? props.theme.accentColor : props.theme.textColor};
+  a {
+    display: block;
+  }
+`;
 
 function Coin(){
     const [loading, setLoading] = useState(true);
@@ -118,6 +145,15 @@ function Coin(){
     const {state} = useLocation<RouteState>();
     const [info, setInfo] = useState<InfoData>();
     const [price, setPrice] = useState<PriceData>();
+   /* 뒤로가기 버튼 */
+    const history = useHistory();
+    function  onBackSubmit(){
+      history.push('/')
+    };
+
+    const priceMatch = useRouteMatch("/:coinId/price");
+    const chartMatch = useRouteMatch("/:coinId/chart");
+
     useEffect(()=>{
         (async ()=> {
            const jsonData = await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`);
@@ -131,11 +167,12 @@ function Coin(){
     }
     ,[coinId]);
     const location = useLocation(); 
-
     console.log(location)
     return (
         <Container>
+           <Back onClick={onBackSubmit} >Back</Back>
             <Header>
+             
             <Title>
           {state?.name ? state.name : loading ? "Loading..." : info?.name}
         </Title>
@@ -170,16 +207,27 @@ function Coin(){
               {/* price.~~로 하게 된다면 항상 요구하기 때문에 데이터가 없을 때 오류를 발생할 수 있음. */}
             </OverviewItem>
           </Overview>
+        <Tabs>
+          <Tab isActive={chartMatch !== null}>
+          <Link to={`/${coinId}/chart`}>chart</Link>
+          </Tab>
+          <Tab isActive={priceMatch !== null}>
+          <Link to={`/${coinId}/price`}>Price</Link>
+          </Tab>  
+        </Tabs>
+       
+        
+
 
           <Switch>
-            <Route path={`/${coinId}/price`}>
+            <Route path={`/:coinId/price`}>
               <Price />
             </Route>
-            <Route path={`/${coinId}/chart`}>
+            <Route path={`/:coinId/chart`}>
               <Chart />
             </Route>
           </Switch>
-
+        
         </>
       )}
         </Container>

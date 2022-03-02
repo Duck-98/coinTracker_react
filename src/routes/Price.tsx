@@ -1,7 +1,13 @@
 import React from 'react';
+import styled from 'styled-components';
+
+const Title = styled.h1`
+color:white;
+`
+
 
 function Price(){
-    return <h1>Price</h1>
+    return <Title>Price</Title>
 }
 
-export default Price
+export default Price;
