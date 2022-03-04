@@ -3,7 +3,9 @@ import { useLocation, useParams,Route,Switch,useHistory,Link,useRouteMatch } fro
 import Chart from './Chart';
 import Price from './Price';
 import styled from 'styled-components'
-
+import { useQuery } from 'react-query';
+import { fetchCoinInfo, fetchCoinTickers } from './api';
+ 
 
 
 interface RouteParams {
@@ -140,11 +142,13 @@ const Tab = styled.span<{ isActive: boolean }>`
 `;
 
 function Coin(){
-    const [loading, setLoading] = useState(true);
-    const {coinId} = useParams<RouteParams>();
-    const {state} = useLocation<RouteState>();
+   /* const [loading, setLoading] = useState(true);
     const [info, setInfo] = useState<InfoData>();
-    const [price, setPrice] = useState<PriceData>();
+    const [price, setPrice] = useState<PriceData>(); */
+
+    const {coinId} = useParams<RouteParams>();
+    const {state} = useLocation<RouteState>(); 
+
    /* 뒤로가기 버튼 */
     const history = useHistory();
     function  onBackSubmit(){
@@ -153,7 +157,7 @@ function Coin(){
 
     const priceMatch = useRouteMatch("/:coinId/price");
     const chartMatch = useRouteMatch("/:coinId/chart");
-
+/*
     useEffect(()=>{
         (async ()=> {
            const jsonData = await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`);
@@ -165,16 +169,21 @@ function Coin(){
            setLoading(false);
         })()
     }
-    ,[coinId]);
+    ,[coinId]); */
+ // isLoading, data는 중복으로 사용되면 안되기 때문에 이름을 변경해주어 사용함. 
+    const {isLoading : infoLoading , data : infoData} = useQuery<InfoData>(["info",coinId], ()=> fetchCoinInfo(coinId));
+    const {isLoading : tickersLoading , data : tickersData} = useQuery<PriceData>(["tickers",coinId], ()=> fetchCoinTickers(coinId));
     const location = useLocation(); 
     console.log(location)
+
+    const loading = infoLoading || tickersLoading;
     return (
         <Container>
            <Back onClick={onBackSubmit} >Back</Back>
             <Header>
              
             <Title>
-          {state?.name ? state.name : loading ? "Loading..." : info?.name}
+          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
       </Header>
       {loading ? (
@@ -184,26 +193,26 @@ function Coin(){
           <Overview>
             <OverviewItem>
               <span>Rank:</span>
-              <span>{info?.rank}</span>
+              <span>{infoData?.rank}</span>
             </OverviewItem>
             <OverviewItem>
               <span>Symbol:</span>
-              <span>${info?.symbol}</span>
+              <span>${infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
               <span>Open Source:</span>
-              <span>{info?.open_source ? "Yes" : "No"}</span>
+              <span>{infoData?.open_source ? "Yes" : "No"}</span>
             </OverviewItem>
           </Overview>
-          <Description>{info?.description}</Description>
+          <Description>{infoData?.description}</Description>
           <Overview>
             <OverviewItem>
               <span>Total Suply:</span>
-              <span>{price?.total_supply}</span>
+              <span>{tickersData?.total_supply}</span>
             </OverviewItem>
             <OverviewItem>
               <span>Max Supply:</span>
-              <span>{price?.max_supply}</span>
+              <span>{tickersData?.max_supply}</span>
               {/* price.~~로 하게 된다면 항상 요구하기 때문에 데이터가 없을 때 오류를 발생할 수 있음. */}
             </OverviewItem>
           </Overview>
