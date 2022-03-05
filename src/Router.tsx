@@ -14,10 +14,10 @@ return (
         <Route path="/">
             <Coins />
         </Route>
-        <Route path="chart" >
-            <Chart/>
+        <Route path={`/:coinId/chart`}>
+             <Chart coinId={''} />
         </Route>    
-        <Route path="price">
+        <Route path={`/:coinId/price`}>
             <Price />
         </Route>    
 
