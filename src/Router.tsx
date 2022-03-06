@@ -18,7 +18,7 @@ return (
              <Chart coinId={''} />
         </Route>    
         <Route path={`/:coinId/price`}>
-            <Price />
+            <Price coinId={''} />
         </Route>       
     </Switch>
 </BrowserRouter>

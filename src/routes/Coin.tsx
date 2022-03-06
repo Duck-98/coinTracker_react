@@ -5,7 +5,7 @@ import Price from './Price';
 import styled from 'styled-components'
 import { useQuery } from 'react-query';
 import { fetchCoinInfo, fetchCoinTickers } from './api';
- 
+import {Helmet} from 'react-helmet';
 
 
 interface RouteParams {
@@ -179,9 +179,12 @@ function Coin(){
     const loading = infoLoading || tickersLoading;
     return (
         <Container>
+          <Helmet>
+            <title> {state?.name ? state.name : loading ? "Loading..." : infoData?.name}</title>
+          </Helmet>
+
            <Back onClick={onBackSubmit} >Back</Back>
             <Header>
-             
             <Title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
@@ -230,7 +233,7 @@ function Coin(){
 
           <Switch>
             <Route path={`/:coinId/price`}>
-              <Price />
+              <Price coinId={coinId} />
             </Route>
             <Route path={`/:coinId/chart`}>
               <Chart coinId={coinId} />
