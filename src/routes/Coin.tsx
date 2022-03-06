@@ -94,7 +94,12 @@ const Back = styled.button`
 height : 20px;
 align-items : left;
 display: flex;
-color : ${props => props.theme.accentColor};
+text-align : center;
+border-radius: 5px;
+background-color :  rgba(0,0,0,0.5);
+border: none;
+color : ${props => props.theme.textColor};
+
 `;
 const Overview = styled.div`
   display: flex;
