@@ -19,9 +19,7 @@ return (
         </Route>    
         <Route path={`/:coinId/price`}>
             <Price />
-        </Route>    
-
-        
+        </Route>       
     </Switch>
 </BrowserRouter>
 )

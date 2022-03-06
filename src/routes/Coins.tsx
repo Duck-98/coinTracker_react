@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import {useState,useEffect} from 'react';
+//import {useState,useEffect} from 'react';
 import { useQuery } from 'react-query';
 import { fetchCoins } from './api';
+import {Helmet} from 'react-helmet';
 
 interface Icoin {
     id: string,
@@ -76,10 +77,14 @@ function Coins(){
         })(); // function을 만들 필요 없이 바로 실행하게 해주는 팁
     },[]) */
     const {isLoading, data} = useQuery<Icoin[]>("allCoins", fetchCoins);
-    return (
+    return ( 
         <Container>
+          <Helmet>
+           <title>Coin</title>
+          </Helmet>
+
             <Header>
-                <Title>코인</Title>
+                <Title>Coin</Title>
             </Header>
             {isLoading ? (
                 <Loader>Loading..</Loader>
@@ -94,6 +99,7 @@ function Coins(){
                       )    
             }
         </Container>
+
     );
 }
 export default Coins;

@@ -150,7 +150,7 @@ function Coin(){
     const {state} = useLocation<RouteState>(); 
 
    /* 뒤로가기 버튼 */
-    const history = useHistory();
+    const history = useHistory(); 
     function  onBackSubmit(){
       history.push('/')
     };
@@ -200,8 +200,8 @@ function Coin(){
               <span>${infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
-              <span>Open Source:</span>
-              <span>{infoData?.open_source ? "Yes" : "No"}</span>
+              <span>Price</span>
+              <span>{tickersData?.quotes.USD.price.toFixed(2)}</span>
             </OverviewItem>
           </Overview>
           <Description>{infoData?.description}</Description>

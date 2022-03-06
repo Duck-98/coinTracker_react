@@ -1,26 +1,82 @@
-import React from 'react';
-import { useQuery } from 'react-query';
-import styled from 'styled-components';
-import { fetchCoinHistory } from './api';
+import { useQuery } from "react-query";
+import { fetchCoinHistory } from "./api";
+import ApexChart from "react-apexcharts";
 
-const Title = styled.h1`
-color:white;
-`;
-
-interface IHistorical{
-    
+interface IHistorical {
+  time_open: string;
+  time_close: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+  market_cap: number;
 }
-
-
 interface ChartProps {
-    coinId : string
+  coinId: string;
 }
-
-function Chart({coinId} : ChartProps){
-
-    const {isLoading, data} = useQuery<ChartProps>(["ohlcv",coinId], ()=> fetchCoinHistory(coinId));
-    return <Title>Chart</Title>
+function Chart({ coinId }: ChartProps) {
+  const { isLoading, data } = useQuery<IHistorical[]>(["ohlcv", coinId], () =>
+    fetchCoinHistory(coinId),
+    {
+        refetchInterval: 10000, // 10초 마다 다시 불러오기
+    }
+  );
+  return (
+    <div>
+      {isLoading ? (
+        "Loading chart..."
+      ) : (
+        <ApexChart
+          type="line"
+          series={[
+            {
+              name: "Price",
+              data: data?.map((price) => price.close),
+            },
+          ]}
+          options={{
+            theme: {
+              mode: "dark",
+            },
+            chart: {
+              height: 300,
+              width: 500,
+              toolbar: {
+                show: false,
+              },
+              background: "transparent",
+            },
+            grid: { show: false },
+            stroke: {
+              curve: "smooth",
+              width: 4,
+            },
+            yaxis: {
+              show: false,
+            },
+            xaxis: {
+              axisBorder: { show: false },
+              axisTicks: { show: false },
+              labels: { show: false },
+              type:"datetime",
+              categories : data?.map((price) => price.time_close),
+            },
+            fill :{
+                type : "gradient",
+                gradient : {gradientToColors : ["#0be881"], stops :[0,100]},
+            },
+            colors:["red"],
+            tooltip : {
+                y: {
+                    formatter :(value) => `$${value.toFixed(3)}`,
+                }
+            }
+          }}
+        />
+      )}
+    </div>
+  );
 }
-
 
 export default Chart;
