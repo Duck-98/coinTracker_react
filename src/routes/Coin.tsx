@@ -70,6 +70,10 @@ interface InfoData {
   }
 
 
+  interface DarkProps {
+    isDark : boolean
+  };
+
 const Title = styled.h1`
 color : ${props => props.theme.accentColor};
 `;
@@ -99,7 +103,6 @@ border-radius: 5px;
 background-color :  rgba(0,0,0,0.5);
 border: none;
 color : ${props => props.theme.textColor};
-
 `;
 const Overview = styled.div`
   display: flex;
@@ -122,7 +125,7 @@ const OverviewItem = styled.div`
 `;
 const Description = styled.p`
   margin: 20px 0px;
-  color: white;
+  color: ${(props)=> props.theme.textColor};
 `;
 const Tabs = styled.div`
   display: grid;
@@ -146,7 +149,7 @@ const Tab = styled.span<{ isActive: boolean }>`
   }
 `;
 
-function Coin(){
+function Coin({isDark} : DarkProps){
    /* const [loading, setLoading] = useState(true);
     const [info, setInfo] = useState<InfoData>();
     const [price, setPrice] = useState<PriceData>(); */
@@ -178,8 +181,8 @@ function Coin(){
  // isLoading, data는 중복으로 사용되면 안되기 때문에 이름을 변경해주어 사용함. 
     const {isLoading : infoLoading , data : infoData} = useQuery<InfoData>(["info",coinId], ()=> fetchCoinInfo(coinId));
     const {isLoading : tickersLoading , data : tickersData} = useQuery<PriceData>(["tickers",coinId], ()=> fetchCoinTickers(coinId));
-    const location = useLocation(); 
-    console.log(location)
+  //const location = useLocation(); 
+
 
     const loading = infoLoading || tickersLoading;
     return (
@@ -241,7 +244,7 @@ function Coin(){
               <Price coinId={coinId} />
             </Route>
             <Route path={`/:coinId/chart`}>
-              <Chart coinId={coinId} />
+              <Chart coinId={coinId}  isDark={isDark}/>
             </Route>
           </Switch>
         

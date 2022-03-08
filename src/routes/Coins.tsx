@@ -14,6 +14,10 @@ interface Icoin {
     is_active: boolean,
     type: string,
 };
+
+interface ItoggleDarkProps {
+    toggleDark : () => void
+}
 const Img = styled.img`
 width : 30px;
 height : 30px;
@@ -22,6 +26,7 @@ margin-right : 10px;
 
 const Title = styled.h1`
 color : ${props => props.theme.accentColor};
+font-size : 40px;
 `;
 
 const Loader = styled.span`
@@ -46,7 +51,7 @@ const CoinList = styled.ul`
 
 const Coin = styled.li`
 background-color: white;
-color: ${(props)=> props.theme.bgColor};
+color: ${(props)=> props.theme.textColor};
 border-radius : 15px;
 padding : 20px;
 margin-bottom : 10px;
@@ -63,8 +68,19 @@ a{
 }
 `;
 
+const Back = styled.button`
+height : 20px;
+align-items : left;
+display: flex;
+text-align : center;
+border-radius: 5px;
+background-color :  rgba(0,0,0,0.5);
+border: none;
+color : ${props => props.theme.textColor};
+`;
 
-function Coins(){
+
+function Coins({toggleDark} : ItoggleDarkProps){
     /*
     const [coins, setCoins] = useState<CoinInterface[]>([]);
     const [loading, setLoading] = useState(true);
@@ -85,6 +101,7 @@ function Coins(){
 
             <Header>
                 <Title>Coin</Title>
+                <Back onClick={toggleDark}>Mode</Back>
             </Header>
             {isLoading ? (
                 <Loader>Loading..</Loader>
