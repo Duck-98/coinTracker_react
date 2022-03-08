@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { fetchCoins } from './api';
 import {Helmet} from 'react-helmet';
+import { useSetRecoilState } from 'recoil';
+import { isDarkAtom } from './atoms';
 
 interface Icoin {
     id: string,
@@ -15,9 +17,7 @@ interface Icoin {
     type: string,
 };
 
-interface ItoggleDarkProps {
-    toggleDark : () => void
-}
+
 const Img = styled.img`
 width : 30px;
 height : 30px;
@@ -80,7 +80,7 @@ color : ${props => props.theme.textColor};
 `;
 
 
-function Coins({toggleDark} : ItoggleDarkProps){
+function Coins(){
     /*
     const [coins, setCoins] = useState<CoinInterface[]>([]);
     const [loading, setLoading] = useState(true);
@@ -92,16 +92,17 @@ function Coins({toggleDark} : ItoggleDarkProps){
            setLoading(false);
         })(); // function을 만들 필요 없이 바로 실행하게 해주는 팁
     },[]) */
+    const setDarkAtom = useSetRecoilState(isDarkAtom)
+    const toggleDarkAtom = () => setDarkAtom( prev => !prev)
     const {isLoading, data} = useQuery<Icoin[]>("allCoins", fetchCoins);
     return ( 
         <Container>
           <Helmet>
            <title>Coin</title>
           </Helmet>
-
             <Header>
                 <Title>Coin</Title>
-                <Back onClick={toggleDark}>Mode</Back>
+                <Back onClick={toggleDarkAtom}>Mode</Back>
             </Header>
             {isLoading ? (
                 <Loader>Loading..</Loader>

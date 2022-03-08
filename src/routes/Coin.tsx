@@ -70,9 +70,7 @@ interface InfoData {
   }
 
 
-  interface DarkProps {
-    isDark : boolean
-  };
+
 
 const Title = styled.h1`
 color : ${props => props.theme.accentColor};
@@ -149,7 +147,7 @@ const Tab = styled.span<{ isActive: boolean }>`
   }
 `;
 
-function Coin({isDark} : DarkProps){
+function Coin(){
    /* const [loading, setLoading] = useState(true);
     const [info, setInfo] = useState<InfoData>();
     const [price, setPrice] = useState<PriceData>(); */
@@ -244,7 +242,7 @@ function Coin({isDark} : DarkProps){
               <Price coinId={coinId} />
             </Route>
             <Route path={`/:coinId/chart`}>
-              <Chart coinId={coinId}  isDark={isDark}/>
+              <Chart coinId={coinId} />
             </Route>
           </Switch>
         
